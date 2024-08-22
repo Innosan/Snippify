@@ -1,0 +1,10 @@
+header, footer div, .page-container {
+	width: 90vw;
+	margin: 0 auto;
+}
+
+.page-container {
+	display: flex;
+	flex-direction: column;
+	gap: 2em;
+}
