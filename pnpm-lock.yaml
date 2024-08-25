@@ -8,6 +8,9 @@ dependencies:
   '@formkit/auto-animate':
     specifier: ^0.8.1
     version: 0.8.2
+  '@iconify-json/devicon':
+    specifier: ^1.1.50
+    version: 1.1.50
   '@nuxt/ui':
     specifier: ^2.12.0
     version: 2.18.4(vite@5.4.2)(vue@3.4.38)
@@ -1033,6 +1036,12 @@ packages:
     dependencies:
       '@tanstack/vue-virtual': 3.10.2(vue@3.4.38)
       vue: 3.4.38
+    dev: false
+
+  /@iconify-json/devicon@1.1.50:
+    resolution: {integrity: sha512-OPW1BoRu7QaOmLdmG/TxNAB0m5ltxiggaUrtzMVJv6GhPoygJVme1vsLr3p2sN7KngmVdZZEOMKqq5+Nb5NVxg==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: false
 
   /@iconify-json/heroicons@1.1.24:

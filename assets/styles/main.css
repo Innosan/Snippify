@@ -6,7 +6,9 @@
 @import "assets/styles/css/width.css";
 @import "assets/styles/css/shapes.css";
 @import "assets/styles/css/footer.css";
-@import "assets/styles/css/editor.css";
+
+@import "assets/styles/css/code-editor-themes/themes.css";
+@import "assets/styles/css/code-editor-themes/themes-base16.css";
 
 /*
  * SCSS

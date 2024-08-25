@@ -1,15 +1,6 @@
 export type Stack = {
 	id: number;
-	title: string;
+	name: string;
+	deviconName: string;
+	description: string;
 };
-
-export const stacks: Stack[] = [
-	{
-		id: 1,
-		title: "React",
-	},
-	{
-		id: 2,
-		title: "Nuxtjs",
-	},
-];

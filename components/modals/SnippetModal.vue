@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import hljs from "highlight.js";
 import { getGenericSnippet, type Snippet } from "~/types/Snippet";
 
-import { type Language, languages } from "~/types/utils/Language";
-import { type Stack, stacks } from "~/types/utils/Stack";
+import stacksData from "public/data/stacks.json";
+import languagesData from "public/data/languages.json";
+
+import { type Language } from "~/types/utils/Language";
+import { type Stack } from "~/types/utils/Stack";
 import { type Tag, tags } from "~/types/utils/Tag";
 
-const props = defineProps({
-	clipboardCode: {
-		type: String,
-		default: "",
-	},
-});
+const stacks: Stack[] = stacksData as Stack[];
+const languages: Language[] = languagesData as Language[];
 
-const emits = defineEmits(["save-snippet"]);
+const emits = defineEmits(["update:snippet"]);
 
 const snippet: Snippet = reactive(getGenericSnippet());
-snippet.code = props.clipboardCode;
 
 onMounted(() => {
-	emits("save-snippet", snippet);
+	emits("update:snippet", snippet);
 });
 watch(snippet, (newVal) => {
-	emits("save-snippet", newVal);
+	emits("update:snippet", newVal);
 });
 </script>
 
@@ -46,18 +43,18 @@ watch(snippet, (newVal) => {
 				class="w-36"
 				v-model="snippet.language"
 				:options="languages"
-				option-attribute="title"
+				option-attribute="name"
 				by="id"
-				:search-attributes="['title']"
+				:search-attributes="['name', 'highlight']"
 			>
 				<template #option="{ option: lang }: { option: Language }">
 					<div class="flex gap-2 items-center">
 						<UIcon
-							:name="`i-devicon-${lang.title.toLowerCase()}`"
+							:name="`i-devicon-${lang.highlight}`"
 							dynamic
 							class="w-4 h-4"
 						/>
-						<p class="truncate">{{ lang.title }}</p>
+						<p class="truncate">{{ lang.name }}</p>
 					</div>
 				</template>
 			</USelectMenu>
@@ -67,19 +64,19 @@ watch(snippet, (newVal) => {
 				placeholder="Choose stack"
 				class="w-36"
 				v-model="snippet.stack"
-				:options="stacks"
-				option-attribute="title"
+				:options="stacks as Stack[]"
+				option-attribute="name"
 				by="id"
-				:search-attributes="['title']"
+				:search-attributes="['name']"
 			>
 				<template #option="{ option: stack }: { option: Stack }">
 					<div class="flex gap-2 items-center">
 						<UIcon
-							:name="`i-devicon-${stack.title.toLowerCase()}`"
+							:name="`i-devicon-${stack.deviconName}`"
 							dynamic
 							class="w-4 h-4"
 						/>
-						<p class="truncate">{{ stack.title }}</p>
+						<p class="truncate">{{ stack.name }}</p>
 					</div>
 				</template>
 			</USelectMenu>
@@ -101,6 +98,7 @@ watch(snippet, (newVal) => {
 		</div>
 		<CodeEditor
 			width="100%"
+			placeholder="// Write your code here..."
 			:language="snippet.language"
 			height="20rem"
 			font-size="14px"
@@ -114,5 +112,3 @@ watch(snippet, (newVal) => {
 		<UTextarea v-model="snippet.description" placeholder="Description" />
 	</div>
 </template>
-
-<style scoped></style>

@@ -14,7 +14,7 @@ const props = defineProps({
 	},
 	isSaveDisabled: {
 		type: Boolean,
-		default: true,
+		default: false,
 	},
 	onSave: {
 		type: Function,
@@ -31,7 +31,7 @@ const isOpen = ref(false);
 	</UTooltip>
 
 	<UModal v-model="isOpen">
-		<UCard>
+		<UCard :ui="CardSizes.md">
 			<template #header>
 				<div class="flex justify-between items-center">
 					<p class="font-bold text-xl">{{ title }}</p>

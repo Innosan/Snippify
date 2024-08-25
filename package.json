@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
+    "@iconify-json/devicon": "^1.1.50",
     "@nuxt/ui": "^2.12.0",
     "@pinia/nuxt": "^0.5.1",
     "highlight.js": "^11.10.0",

@@ -1,0 +1,42 @@
+[
+	{
+		"id": 1,
+		"name": "routeros"
+	},
+	{
+		"id": 2,
+		"name": "school-book"
+	},
+	{
+		"id": 3,
+		"name": "shades-of-purple"
+	},
+	{
+		"id": 4,
+		"name": "srcery"
+	},
+	{
+		"id": 5,
+		"name": "stackoverflow-dark"
+	},
+	{
+		"id": 6,
+		"name": "stackoverflow-light"
+	},
+	{
+		"id": 7,
+		"name": "sunburst"
+	},
+	{
+		"id": 8,
+		"name": "tokyo-night-dark"
+	},
+	{
+		"id": 9,
+		"name": "tokyo-night-light"
+	},
+	{
+		"id": 10,
+		"name": "tomorrow-night-blue"
+	}
+]

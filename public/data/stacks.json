@@ -1,0 +1,86 @@
+[
+	{
+		"id": 1,
+		"name": "React",
+		"deviconName": "react",
+		"description": "A JavaScript library for building user interfaces"
+	},
+	{
+		"id": 2,
+		"name": "Vue",
+		"deviconName": "vue",
+		"description": "The Progressive JavaScript Framework"
+	},
+	{
+		"id": 3,
+		"name": "Angular",
+		"deviconName": "angular",
+		"description": "A platform that makes it easy to build applications with the web"
+	},
+	{
+		"id": 4,
+		"name": "Node.js",
+		"deviconName": "nodejs",
+		"description": "A JavaScript runtime built on Chrome's V8 JavaScript engine"
+	},
+	{
+		"id": 5,
+		"name": "Express",
+		"deviconName": "express",
+		"description": "Fast, unopinionated, minimalist web framework for Node.js"
+	},
+	{
+		"id": 6,
+		"name": "Django",
+		"deviconName": "django",
+		"description": "The web framework for perfectionists with deadlines"
+	},
+	{
+		"id": 7,
+		"name": "Flask",
+		"deviconName": "flask",
+		"description": "A micro web framework for Python"
+	},
+	{
+		"id": 8,
+		"name": "Spring",
+		"deviconName": "spring",
+		"description": "An application framework and inversion of control container for the Java platform"
+	},
+	{
+		"id": 9,
+		"name": "Ruby on Rails",
+		"deviconName": "rails",
+		"description": "A web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern"
+	},
+	{
+		"id": 10,
+		"name": "Laravel",
+		"deviconName": "laravel",
+		"description": "A web application framework with expressive, elegant syntax"
+	},
+	{
+		"id": 11,
+		"name": "ASP.NET",
+		"deviconName": "dot-net",
+		"description": "A free, open-source framework for building modern, cloud-based, internet-connected applications"
+	},
+	{
+		"id": 12,
+		"name": "Ruby",
+		"deviconName": "ruby",
+		"description": "A dynamic, open source programming language with a focus on simplicity and productivity"
+	},
+	{
+		"id": 13,
+		"name": "Spring Boot",
+		"deviconName": "spring",
+		"description": "An open-source Java-based framework used to create micro-services"
+	},
+	{
+		"id": 14,
+		"name": "ASP.NET Core",
+		"deviconName": "dot-net",
+		"description": "Free, open-source, cross-platform framework for building modern, cloud-based, internet-connected applications"
+	}
+]

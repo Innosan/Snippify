@@ -1,7 +1,6 @@
 import type { Language } from "~/types/utils/Language";
 import type { Tag } from "~/types/utils/Tag";
 import type { Stack } from "~/types/utils/Stack";
-import { languages } from "~/types/utils/Language";
 
 export type Snippet = {
 	id: number;
@@ -24,11 +23,17 @@ export const getGenericSnippet = (): Snippet => ({
 	title: "",
 	description: "",
 	code: "",
-	language: languages[0],
+	language: {
+		id: 1,
+		name: "JavaScript",
+		highlight: "javascript",
+	},
 	tags: [],
 	stack: {
 		id: 0,
-		title: "",
+		name: "",
+		deviconName: "",
+		description: "",
 	},
 	is_public: false,
 	user: "",
@@ -42,7 +47,11 @@ export const exampleSnippets: Snippet[] = [
 		title: "Example Snippet",
 		description: "This is an example snippet.",
 		code: "console.log('Hello, world!');",
-		language: languages[0],
+		language: {
+			id: 1,
+			name: "JavaScript",
+			highlight: "javascript",
+		},
 		tags: [
 			{
 				id: 1,
@@ -51,7 +60,9 @@ export const exampleSnippets: Snippet[] = [
 		],
 		stack: {
 			id: 1,
-			title: "Frontend",
+			name: "Frontend",
+			deviconName: "html5",
+			description: "Frontend development",
 		},
 		is_public: true,
 		user: "example",
@@ -63,7 +74,11 @@ export const exampleSnippets: Snippet[] = [
 		title: "Example Snippet 2",
 		description: "This is an example snippet 2.",
 		code: "console.log('Hello, world!');",
-		language: languages[0],
+		language: {
+			id: 1,
+			name: "JavaScript",
+			highlight: "javascript",
+		},
 		tags: [
 			{
 				id: 1,
@@ -72,7 +87,9 @@ export const exampleSnippets: Snippet[] = [
 		],
 		stack: {
 			id: 1,
-			title: "Frontend",
+			name: "Frontend",
+			deviconName: "html5",
+			description: "Frontend development",
 		},
 		is_public: true,
 		user: "example",
