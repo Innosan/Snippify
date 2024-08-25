@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { PropType } from "vue";
+
 const props = defineProps({
 	icon: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	title: {
 		type: String,
@@ -10,7 +12,11 @@ const props = defineProps({
 	},
 	description: {
 		type: String,
-		required: true,
+		default: "",
+	},
+	size: {
+		type: String as PropType<"sm" | "md" | "lg" | "xl">,
+		default: "lg",
 	},
 });
 </script>
@@ -18,12 +24,19 @@ const props = defineProps({
 <template>
 	<div class="flex flex-col gap-1">
 		<div class="flex gap-2 items-center">
-			<UIcon class="w-5 h-5" :name="icon" />
-			<p class="font-bold text-xl">{{ title }}</p>
+			<UIcon
+				v-if="icon !== ''"
+				:class="TitleSizes[size].icon"
+				:name="icon"
+			/>
+			<p :class="'font-bold ' + TitleSizes[size].text">{{ title }}</p>
 			<slot name="tabs" />
 		</div>
-		<p class="opacity-70 font-bold text-sm">{{ description }}</p>
+		<p
+			v-if="description !== ''"
+			:class="'opacity-70 font-bold ' + TitleSizes[size].description"
+		>
+			{{ description }}
+		</p>
 	</div>
 </template>
-
-<style scoped></style>

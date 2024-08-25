@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PropType } from "vue";
+
 const props = defineProps({
 	title: {
 		type: String,
@@ -6,11 +8,11 @@ const props = defineProps({
 	},
 	icon: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	description: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	spacing: {
 		type: String,
@@ -20,12 +22,21 @@ const props = defineProps({
 		type: Boolean,
 		default: true,
 	},
+	titleSize: {
+		type: String as PropType<"sm" | "md" | "lg" | "xl">,
+		default: "lg",
+	},
 });
 </script>
 
 <template>
 	<section class="flex flex-col" :class="spacing">
-		<IconTitle :icon="icon" :title="title" :description="description">
+		<IconTitle
+			:size="titleSize"
+			:icon="icon"
+			:title="title"
+			:description="description"
+		>
 			<template #tabs>
 				<slot name="switcher" />
 			</template>

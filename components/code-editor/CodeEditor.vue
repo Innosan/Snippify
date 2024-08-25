@@ -1,10 +1,7 @@
 <script setup lang="ts">
-// @ts-nocheck - some errors with properties of html elems
-
 import hljs from "highlight.js";
 import type { PropType } from "vue";
 import type { Language } from "~/types/utils/Language";
-import ClearCode from "~/components/code-editor/ClearCode.vue";
 
 const props = defineProps({
 	lineNums: {
@@ -20,10 +17,6 @@ const props = defineProps({
 	},
 	value: {
 		type: String,
-	},
-	theme: {
-		type: String,
-		default: "github-dark-dimmed",
 	},
 	tabSpaces: {
 		type: Number,
@@ -93,10 +86,6 @@ const props = defineProps({
 		type: String,
 		default: "0",
 	},
-	fontSize: {
-		type: String,
-		default: "17px",
-	},
 	padding: {
 		type: String,
 		default: "20px",
@@ -104,8 +93,10 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["update:modelValue"]);
+const settingsStore = useSettingsStore();
 
 // Directives
+
 const vHighlight = {
 	mounted(el: HTMLElement, binding: { value: string }) {
 		el.textContent = binding.value;
@@ -293,7 +284,7 @@ onUpdated(() => {
 
 <template>
 	<div
-		:theme="theme"
+		:theme="settingsStore.theme"
 		class="code-editor"
 		:class="{
 			'hide-header': !header,
@@ -339,7 +330,7 @@ onUpdated(() => {
 					ref="lineNums"
 					class="line-nums hljs"
 					:style="{
-						fontSize: fontSize,
+						fontSize: settingsStore.fontSize + 'px',
 						paddingTop: header ? '10px' : padding,
 						paddingBottom: padding,
 						top: top + 'px',
@@ -353,7 +344,7 @@ onUpdated(() => {
 					:placeholder="placeholder"
 					:readOnly="readOnly"
 					:style="{
-						fontSize: fontSize,
+						fontSize: settingsStore.fontSize + 'px',
 						padding: !header
 							? padding
 							: lineNums
@@ -389,7 +380,7 @@ onUpdated(() => {
 						:style="{
 						top: top + 'px',
 						left: left + 'px',
-						fontSize: fontSize,
+						fontSize: settingsStore.fontSize + 'px',
 						padding: !header ? padding : lineNums ? '10px ' + padding + ' ' + padding : '0 ' + padding + ' ' + padding,
 					  }">
 					</code>

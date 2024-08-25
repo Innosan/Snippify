@@ -1,6 +1,9 @@
 export const useSettingsStore = defineStore(
 	"settings-store",
 	() => {
+		/**
+		 * Theming settings
+		 */
 		const primaryColor = ref("violet");
 		const grayColor = ref("zinc");
 
@@ -12,11 +15,30 @@ export const useSettingsStore = defineStore(
 			grayColor.value = color;
 		};
 
+		/**
+		 * Editor settings
+		 */
+		const fontSize = ref(16);
+		const theme = ref("github-dark-dimmed");
+
+		const setFontSize = (size: number) => {
+			fontSize.value = size;
+		};
+
+		const setTheme = (themeName: string) => {
+			theme.value = themeName;
+		};
+
 		return {
 			primaryColor,
 			grayColor,
 			setPrimaryColor,
 			setGrayColor,
+
+			fontSize,
+			theme,
+			setFontSize,
+			setTheme,
 		};
 	},
 	{

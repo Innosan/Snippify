@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const settingsStore = useSettingsStore();
+
 const changeTheme = (color: string) => {
 	useAppConfig().ui.primary = color;
 	settingsStore.setPrimaryColor(color);
