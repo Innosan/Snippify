@@ -1,22 +1,41 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import SnippetModal from "~/components/modals/SnippetModal.vue";
+import GuideModal from "~/components/modals/GuideModal.vue";
+import Modal from "~/components/modals/Modal.vue";
+
+const user = useSupabaseUser();
+</script>
 
 <template>
 	<header class="flex justify-between items-center gap-4">
 		<div class="flex gap-6 items-center">
 			<h1 class="font-black text-2xl text-nowrap text-primary">
-				Nuxt Template
+				Snippify
 			</h1>
-			<TopNavigation class="md:flex hidden" :links="navigation" />
+			<div class="md:flex md:items-center gap-4 hidden" v-if="user">
+				<TopNavigation :links="navigation" />
+			</div>
 		</div>
-		<div>
+		<div v-if="user" class="flex gap-2">
+			<Modal
+				title="Your new snippet"
+				tooltip="Add snippet"
+				icon="i-heroicons-code-bracket-square-solid"
+			>
+				<SnippetModal />
+			</Modal>
+			<Modal
+				title="Your new guide"
+				tooltip="Create new guide"
+				icon="i-heroicons-bookmark-square-solid"
+			>
+				<GuideModal />
+			</Modal>
+
 			<SidebarNavigation
 				class="block md:hidden"
 				:navigation="navigation"
 			/>
-			<div class="md:flex hidden gap-4 items-center">
-				<ThemeSwitch />
-				<ColorSwitch />
-			</div>
 		</div>
 	</header>
 </template>

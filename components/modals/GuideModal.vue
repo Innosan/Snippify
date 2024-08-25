@@ -1,5 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-	<h2>About page</h2>
+	<div>
+		<p>Add guide</p>
+	</div>
 </template>
+
+<style scoped></style>

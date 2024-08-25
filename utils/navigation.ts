@@ -3,21 +3,21 @@ import type { NavigationLink } from "~/types/general";
 export const navigation: NavigationLink[] = [
 	{
 		id: 1,
-		to: "/",
+		to: "/home",
 		label: "Home",
 		icon: "i-heroicons-home-solid",
 	},
 	{
 		id: 2,
-		to: "/about",
-		label: "About",
-		icon: "i-heroicons-information-circle",
-	},
-	{
-		id: 3,
 		to: "/help",
 		label: "Help",
 		icon: "i-heroicons-user-group-solid",
+	},
+	{
+		id: 3,
+		to: "/settings",
+		label: "Settings",
+		icon: "i-heroicons-cog-8-tooth-solid",
 	},
 ];
 

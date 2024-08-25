@@ -4,6 +4,7 @@ header, footer div, .page-container {
 }
 
 .page-container {
+	margin-top: 1.5rem;
 	display: flex;
 	flex-direction: column;
 	gap: 2em;

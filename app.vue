@@ -15,5 +15,7 @@ appConfig.ui.primary = settingsStore.primaryColor;
 			<NuxtPage :key="route" />
 		</div>
 		<Footer />
+
+		<UNotifications />
 	</div>
 </template>

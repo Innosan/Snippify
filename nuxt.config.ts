@@ -6,6 +6,7 @@ export default defineNuxtConfig({
 		"@formkit/auto-animate/nuxt",
 		"@pinia/nuxt",
 		"@pinia-plugin-persistedstate/nuxt",
+		"@nuxtjs/supabase",
 	],
 
 	components: [
@@ -14,6 +15,16 @@ export default defineNuxtConfig({
 			pathPrefix: false,
 		},
 	],
+
+	supabase: {
+		redirectOptions: {
+			login: "/login",
+			callback: "/confirm",
+			include: undefined,
+			exclude: [],
+			cookieRedirect: false,
+		},
+	},
 
 	css: ["~/assets/styles/main.css"],
 });
