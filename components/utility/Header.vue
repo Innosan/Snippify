@@ -2,8 +2,11 @@
 import SnippetModal from "~/components/modals/SnippetModal.vue";
 import GuideModal from "~/components/modals/GuideModal.vue";
 import Modal from "~/components/modals/Modal.vue";
+import { getGenericSnippet, type Snippet } from "~/types/Snippet";
 
 const user = useSupabaseUser();
+
+const newSnippet: Snippet = reactive(getGenericSnippet());
 </script>
 
 <template>
@@ -21,13 +24,20 @@ const user = useSupabaseUser();
 				title="Your new snippet"
 				tooltip="Add snippet"
 				icon="i-heroicons-code-bracket-square-solid"
+				:on-save="() => console.log('save snippet')"
+				:is-save-disabled="
+					newSnippet.title === '' ||
+					newSnippet.description === '' ||
+					newSnippet.code === ''
+				"
 			>
-				<SnippetModal />
+				<SnippetModal @save-snippet="(val) => (newSnippet = val)" />
 			</Modal>
 			<Modal
 				title="Your new guide"
 				tooltip="Create new guide"
 				icon="i-heroicons-bookmark-square-solid"
+				:on-save="() => console.log('save guide')"
 			>
 				<GuideModal />
 			</Modal>

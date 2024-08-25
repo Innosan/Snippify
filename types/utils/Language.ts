@@ -20,4 +20,9 @@ export const languages: Language[] = [
 		title: "HTML5",
 		highlight: "html",
 	},
+	{
+		id: 4,
+		title: "Kotlin",
+		highlight: "kotlin",
+	},
 ];

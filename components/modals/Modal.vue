@@ -12,6 +12,14 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	isSaveDisabled: {
+		type: Boolean,
+		default: true,
+	},
+	onSave: {
+		type: Function,
+		required: true,
+	},
 });
 
 const isOpen = ref(false);
@@ -37,6 +45,15 @@ const isOpen = ref(false);
 				</div>
 			</template>
 			<slot />
+			<template #footer>
+				<UButton
+					@click="onSave()"
+					:disabled="isSaveDisabled"
+					label="Save"
+					class="w-full"
+					color="gray"
+				/>
+			</template>
 		</UCard>
 	</UModal>
 </template>

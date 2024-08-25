@@ -1,3 +1,282 @@
+<script setup>
+import hljs from "highlight.js/lib/core";
+import "./themes/themes-base16.css";
+import "./themes/themes.css";
+
+const props = defineProps({
+	lineNums: {
+		type: Boolean,
+		default: false,
+	},
+	placeholder: {
+		type: String,
+		default: "// Write your code here...",
+	},
+	modelValue: {
+		type: String,
+	},
+	value: {
+		type: String,
+	},
+	theme: {
+		type: String,
+		default: "github-dark",
+	},
+	tabSpaces: {
+		type: Number,
+		default: 2,
+	},
+	wrap: {
+		type: Boolean,
+		default: false,
+	},
+	readOnly: {
+		type: Boolean,
+		default: false,
+	},
+	autofocus: {
+		type: Boolean,
+		default: false,
+	},
+	header: {
+		type: Boolean,
+		default: true,
+	},
+	width: {
+		type: String,
+		default: "540px",
+	},
+	height: {
+		type: String,
+		default: "auto",
+	},
+	maxWidth: {
+		type: String,
+	},
+	minWidth: {
+		type: String,
+	},
+	maxHeight: {
+		type: String,
+	},
+	minHeight: {
+		type: String,
+	},
+	borderRadius: {
+		type: String,
+		default: "12px",
+	},
+	language: {
+		type: Object,
+		default: {
+			id: 1,
+			title: "JavaScript",
+			highlight: "javascript",
+		},
+	},
+	displayLanguage: {
+		type: Boolean,
+		default: true,
+	},
+	copyCode: {
+		type: Boolean,
+		default: true,
+	},
+	zIndex: {
+		type: String,
+		default: "0",
+	},
+	fontSize: {
+		type: String,
+		default: "17px",
+	},
+	padding: {
+		type: String,
+		default: "20px",
+	},
+});
+
+const emits = defineEmits(["update:modelValue", "lang", "content", "textarea"]);
+
+// Directives
+const vHighlight = {
+	mounted(el, binding) {
+		el.textContent = binding.value;
+		hljs.highlightElement(el);
+		el.dataset.highlighted = true;
+	},
+	updated(el, binding) {
+		if (el.scrolling) {
+			el.scrolling = false;
+		} else {
+			el.textContent = binding.value;
+			if (el.dataset.highlighted) {
+				delete el.dataset.highlighted;
+			}
+			hljs.highlightElement(el);
+			el.dataset.highlighted = true;
+		}
+	},
+};
+
+// Props
+const scrollBarWidth = ref(0);
+const scrollBarHeight = ref(0);
+const top = ref(0);
+const left = ref(0);
+const content = ref(props.value);
+const cursorPosition = ref(0);
+const insertTab = ref(false);
+const lineNum = ref(0);
+const lineNumsWidth = ref(0);
+const scrolling = ref(false);
+const textareaHeight = ref(0);
+const showLineNums = ref(props.wrap ? false : props.lineNums);
+
+// DOM refs
+const textarea = ref(null);
+const code = ref(null);
+const lineNums = ref(null);
+
+// Computed refs
+const tabWidth = computed(() => {
+	let result = "";
+	for (let i = 0; i < props.tabSpaces; i++) {
+		result += " ";
+	}
+	return result;
+});
+
+const contentValue = computed(() => {
+	return props.modelValue == undefined
+		? content.value + "\n"
+		: props.modelValue + "\n";
+});
+
+const scroll = computed(() => {
+	return props.height == "auto" ? false : true;
+});
+
+// Functions
+const removeLeadingTabs = (text) => {
+	const lines = text.split("\n");
+	const minLeadingTabs = Math.min(
+		...lines
+			.filter((line) => line.trim())
+			.map((line) => line.match(/^\t*/)[0].length),
+	);
+
+	return lines.map((line) => line.slice(minLeadingTabs)).join("\n");
+};
+
+const updateValue = (e) => {
+	const text = e.target.value;
+	const processedText = removeLeadingTabs(text);
+	if (props.modelValue == undefined) {
+		content.value = processedText;
+	} else {
+		emits("update:modelValue", processedText);
+	}
+};
+
+const tab = () => {
+	if (document.execCommand("insertText")) {
+		document.execCommand("insertText", false, tabWidth.value);
+	} else {
+		const localCursorPosition = textarea.value.selectionStart;
+		content.value =
+			content.value.substring(0, localCursorPosition) +
+			tabWidth.value +
+			content.value.substring(localCursorPosition);
+		cursorPosition.value = localCursorPosition + tabWidth.value.length;
+		insertTab.value = true;
+	}
+};
+
+const calsScrollDistance = (e) => {
+	code.value.scrolling = true;
+	scrolling.value = true;
+	top.value = -e.target.scrollTop;
+	left.value = -e.target.scrollLeft;
+};
+
+const resizer = () => {
+	// textareaResizer
+	const textareaResizer = new ResizeObserver((entries) => {
+		scrollBarWidth.value =
+			entries[0].target.offsetWidth - entries[0].target.clientWidth;
+		scrollBarHeight.value =
+			entries[0].target.offsetHeight - entries[0].target.clientHeight;
+		textareaHeight.value = entries[0].target.offsetHeight;
+	});
+	textareaResizer.observe(textarea.value);
+	// lineNumsResizer
+	const lineNumsResizer = new ResizeObserver((entries) => {
+		lineNumsWidth.value = entries[0].target.offsetWidth;
+	});
+	if (lineNums.value) {
+		lineNumsResizer.observe(lineNums.value);
+	}
+};
+
+const copy = () => {
+	if (document.execCommand("copy")) {
+		textarea.value.select();
+		document.execCommand("copy");
+		window.getSelection().removeAllRanges();
+	} else {
+		navigator.clipboard.writeText(textarea.value.value);
+	}
+};
+
+const getLineNum = () => {
+	// lineNum
+	const str = textarea.value.value;
+	let localLineNum = 0;
+	let position = str.indexOf("\n");
+	while (position !== -1) {
+		localLineNum++;
+		position = str.indexOf("\n", position + 1);
+	}
+	// heightNum
+	const singleLineHeight = lineNums.value.firstChild.offsetHeight;
+	const heightNum = parseInt(textareaHeight.value / singleLineHeight) - 1;
+	// displayed lineNum
+	lineNum.value =
+		props.height == "auto"
+			? localLineNum
+			: localLineNum > heightNum
+			  ? localLineNum
+			  : heightNum;
+};
+
+// Lifecycle
+onMounted(() => {
+	emits("lang", props.language);
+	emits("content", content.value);
+	emits("textarea", textarea.value);
+
+	resizer();
+});
+
+onUpdated(() => {
+	if (insertTab.value) {
+		textarea.value.setSelectionRange(
+			cursorPosition.value,
+			cursorPosition.value,
+		);
+		insertTab.value = false;
+	}
+	if (lineNums.value) {
+		if (scrolling.value) {
+			scrolling.value = false;
+		} else {
+			getLineNum();
+		}
+	}
+});
+</script>
+
 <template>
 	<div
 		:theme="theme"
@@ -73,10 +352,10 @@
 					:autofocus="autofocus"
 					spellcheck="false"
 					@keydown.tab.prevent.stop="tab"
-					@scroll="calcScrollDistance"
+					@scroll="calsScrollDistance"
 					:value="modelValue == undefined ? content : modelValue"
 					@input="updateValue"
-				></textarea>
+				/>
 				<pre
 					:style="{
 						paddingRight: scrollBarWidth + 'px',
@@ -87,293 +366,24 @@
 							: '100%',
 					}"
 				>
-        <code
-          ref="code"
-          :class="'language-' + language.highlight"
-		  v-highlight="contentValue"
-          :style="{
-            top: top + 'px',
-            left: left + 'px',
-            fontSize: fontSize,
-            padding: !header ? padding : lineNums ? '10px ' + padding + ' ' + padding : '0 ' + padding + ' ' + padding,
-          }">
-        </code>
-      </pre>
+					<code
+						ref="code"
+						:class="'language-' + language.highlight"
+						v-highlight="contentValue"
+						:style="{
+						top: top + 'px',
+						left: left + 'px',
+						fontSize: fontSize,
+						padding: !header ? padding : lineNums ? '10px ' + padding + ' ' + padding : '0 ' + padding + ' ' + padding,
+					  }">
+					</code>
+				</pre>
 			</div>
 		</div>
 	</div>
 </template>
 
-<script>
-import hljs from "highlight.js/lib/core";
-import "./themes/themes-base16.css";
-import "./themes/themes.css";
-
-export default {
-	name: "CodeEditor",
-	props: {
-		lineNums: {
-			type: Boolean,
-			default: false,
-		},
-		placeholder: {
-			type: String,
-			default: "// Write your code here...",
-		},
-		modelValue: {
-			type: String,
-		},
-		value: {
-			type: String,
-		},
-		theme: {
-			type: String,
-			default: "github-dark",
-		},
-		tabSpaces: {
-			type: Number,
-			default: 2,
-		},
-		wrap: {
-			type: Boolean,
-			default: false,
-		},
-		readOnly: {
-			type: Boolean,
-			default: false,
-		},
-		autofocus: {
-			type: Boolean,
-			default: false,
-		},
-		header: {
-			type: Boolean,
-			default: true,
-		},
-		width: {
-			type: String,
-			default: "540px",
-		},
-		height: {
-			type: String,
-			default: "auto",
-		},
-		maxWidth: {
-			type: String,
-		},
-		minWidth: {
-			type: String,
-		},
-		maxHeight: {
-			type: String,
-		},
-		minHeight: {
-			type: String,
-		},
-		borderRadius: {
-			type: String,
-			default: "12px",
-		},
-		language: {
-			type: Object,
-			default: {
-				id: 1,
-				title: "JavaScript",
-				highlight: "javascript",
-			},
-		},
-		langListWidth: {
-			type: String,
-			default: "110px",
-		},
-		langListHeight: {
-			type: String,
-			default: "auto",
-		},
-		langListDisplay: {
-			type: Boolean,
-			default: false,
-		},
-		displayLanguage: {
-			type: Boolean,
-			default: true,
-		},
-		copyCode: {
-			type: Boolean,
-			default: true,
-		},
-		zIndex: {
-			type: String,
-			default: "0",
-		},
-		fontSize: {
-			type: String,
-			default: "17px",
-		},
-		padding: {
-			type: String,
-			default: "20px",
-		},
-	},
-	directives: {
-		highlight: {
-			mounted(el, binding) {
-				el.textContent = binding.value;
-				hljs.highlightElement(el);
-				el.dataset.highlighted = true;
-			},
-			updated(el, binding) {
-				if (el.scrolling) {
-					el.scrolling = false;
-				} else {
-					el.textContent = binding.value;
-					if (el.dataset.highlighted) {
-						delete el.dataset.highlighted;
-					}
-					hljs.highlightElement(el);
-					el.dataset.highlighted = true;
-				}
-			},
-		},
-	},
-	data() {
-		return {
-			scrollBarWidth: 0,
-			scrollBarHeight: 0,
-			top: 0,
-			left: 0,
-			content: this.value,
-			cursorPosition: 0,
-			insertTab: false,
-			lineNum: 0,
-			lineNumsWidth: 0,
-			scrolling: false,
-			textareaHeight: 0,
-			showLineNums: this.wrap ? false : this.lineNums,
-		};
-	},
-	computed: {
-		tabWidth() {
-			let result = "";
-			for (let i = 0; i < this.tabSpaces; i++) {
-				result += " ";
-			}
-			return result;
-		},
-		contentValue() {
-			return this.modelValue == undefined
-				? this.content + "\n"
-				: this.modelValue + "\n";
-		},
-		scroll() {
-			return this.height == "auto" ? false : true;
-		},
-	},
-	methods: {
-		updateValue(e) {
-			if (this.modelValue == undefined) {
-				this.content = e.target.value;
-			} else {
-				this.$emit("update:modelValue", e.target.value);
-			}
-		},
-		tab() {
-			if (document.execCommand("insertText")) {
-				document.execCommand("insertText", false, this.tabWidth);
-			} else {
-				const cursorPosition = this.$refs.textarea.selectionStart;
-				this.content =
-					this.content.substring(0, cursorPosition) +
-					this.tabWidth +
-					this.content.substring(cursorPosition);
-				this.cursorPosition = cursorPosition + this.tabWidth.length;
-				this.insertTab = true;
-			}
-		},
-		calcScrollDistance(e) {
-			this.$refs.code.scrolling = true;
-			this.scrolling = true;
-			this.top = -e.target.scrollTop;
-			this.left = -e.target.scrollLeft;
-		},
-		resizer() {
-			// textareaResizer
-			const textareaResizer = new ResizeObserver((entries) => {
-				this.scrollBarWidth =
-					entries[0].target.offsetWidth -
-					entries[0].target.clientWidth;
-				this.scrollBarHeight =
-					entries[0].target.offsetHeight -
-					entries[0].target.clientHeight;
-				this.textareaHeight = entries[0].target.offsetHeight;
-			});
-			textareaResizer.observe(this.$refs.textarea);
-			// lineNumsResizer
-			const lineNumsResizer = new ResizeObserver((entries) => {
-				this.lineNumsWidth = entries[0].target.offsetWidth;
-			});
-			if (this.$refs.lineNums) {
-				lineNumsResizer.observe(this.$refs.lineNums);
-			}
-		},
-		copy() {
-			if (document.execCommand("copy")) {
-				this.$refs.textarea.select();
-				document.execCommand("copy");
-				window.getSelection().removeAllRanges();
-			} else {
-				navigator.clipboard.writeText(this.$refs.textarea.value);
-			}
-		},
-		getLineNum() {
-			// lineNum
-			const str = this.$refs.textarea.value;
-			let lineNum = 0;
-			let position = str.indexOf("\n");
-			while (position !== -1) {
-				lineNum++;
-				position = str.indexOf("\n", position + 1);
-			}
-			// heightNum
-			const singleLineHeight =
-				this.$refs.lineNums.firstChild.offsetHeight;
-			const heightNum =
-				parseInt(this.textareaHeight / singleLineHeight) - 1;
-			// displayed lineNum
-			this.lineNum =
-				this.height == "auto"
-					? lineNum
-					: lineNum > heightNum
-					  ? lineNum
-					  : heightNum;
-		},
-	},
-	mounted() {
-		this.$emit("lang", this.language);
-		this.$emit("content", this.content);
-		this.$emit("textarea", this.$refs.textarea);
-		this.resizer();
-	},
-	updated() {
-		if (this.insertTab) {
-			this.$refs.textarea.setSelectionRange(
-				this.cursorPosition,
-				this.cursorPosition,
-			);
-			this.insertTab = false;
-		}
-		if (this.lineNums) {
-			if (this.scrolling) {
-				this.scrolling = false;
-			} else {
-				this.getLineNum();
-			}
-		}
-	},
-};
-</script>
-
-<style>
+<style scoped>
 .code-editor {
 	position: relative;
 }

@@ -6,7 +6,24 @@ import { type Language, languages } from "~/types/utils/Language";
 import { type Stack, stacks } from "~/types/utils/Stack";
 import { type Tag, tags } from "~/types/utils/Tag";
 
+const props = defineProps({
+	clipboardCode: {
+		type: String,
+		default: "",
+	},
+});
+
+const emits = defineEmits(["save-snippet"]);
+
 const snippet: Snippet = reactive(getGenericSnippet());
+snippet.code = props.clipboardCode;
+
+onMounted(() => {
+	emits("save-snippet", snippet);
+});
+watch(snippet, (newVal) => {
+	emits("save-snippet", newVal);
+});
 </script>
 
 <template>
@@ -85,13 +102,16 @@ const snippet: Snippet = reactive(getGenericSnippet());
 		<CodeEditor
 			width="100%"
 			:language="snippet.language"
-			height="24rem"
+			height="20rem"
 			font-size="14px"
 			:tab-spaces="4"
 			class="h-64"
 			:line-nums="true"
 			v-model="snippet.code"
+			:copy-code="false"
 		/>
+		<UInput v-model="snippet.title" placeholder="Title" />
+		<UTextarea v-model="snippet.description" placeholder="Description" />
 	</div>
 </template>
 
