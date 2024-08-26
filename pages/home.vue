@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useSnippetsStore } from "~/stores/snippets";
+
+const snippetsStore = useSnippetsStore();
+await snippetsStore.getUserSnippets();
+
 const tabs = [
 	{ name: "Snippets", to: "snippets" },
 	{ name: "Guides", to: "guides" },
@@ -17,7 +22,9 @@ const selectedCommTab = ref("snippets");
 		<template #switcher>
 			<Tabs @update:selected-tab="selectedFavTab = $event" :tabs="tabs" />
 		</template>
-		<p v-if="selectedFavTab === 'snippets'">Snippets</p>
+		<div v-if="selectedFavTab === 'snippets'">
+			<p>{{ snippetsStore.snippets }}</p>
+		</div>
 		<p v-else>Guides</p>
 	</TitledSection>
 

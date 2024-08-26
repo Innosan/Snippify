@@ -1,0 +1,50 @@
+[
+	{
+		"id": 1,
+		"name": "component"
+	},
+	{
+		"id": 2,
+		"name": "function"
+	},
+	{
+		"id": 3,
+		"name": "hook"
+	},
+	{
+		"id": 4,
+		"name": "style"
+	},
+	{
+		"id": 5,
+		"name": "store"
+	},
+	{
+		"id": 6,
+		"name": "test"
+	},
+	{
+		"id": 7,
+		"name": "type"
+	},
+	{
+		"id": 8,
+		"name": "util"
+	},
+	{
+		"id": 9,
+		"name": "variable"
+	},
+	{
+		"id": 10,
+		"name": "other"
+	},
+	{
+		"id": 11,
+		"name": "container"
+	},
+	{
+		"id": 12,
+		"name": "config"
+	}
+]

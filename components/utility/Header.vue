@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import SnippetModal from "~/components/modals/SnippetModal.vue";
-import GuideModal from "~/components/modals/GuideModal.vue";
-import Modal from "~/components/modals/Modal.vue";
-import { getGenericSnippet } from "~/types/Snippet";
+import { getGenericSnippet, getSaveStatusMessage } from "~/types/Snippet";
 
 const user = useSupabaseUser();
 
 const newSnippet = ref(getGenericSnippet());
+const saveSnippetStatus = computed(() => {
+	const message = getSaveStatusMessage(newSnippet.value);
+	return {
+		isDisabled: message !== "",
+		message,
+	};
+});
 </script>
 
 <template>
@@ -25,11 +29,8 @@ const newSnippet = ref(getGenericSnippet());
 				tooltip="Add snippet"
 				icon="i-heroicons-code-bracket-square-solid"
 				:on-save="() => console.log('save snippet')"
-				:is-save-disabled="
-					newSnippet.title === '' ||
-					newSnippet.code === '' ||
-					newSnippet.description === ''
-				"
+				:is-save-disabled="saveSnippetStatus.isDisabled"
+				:save-status-message="saveSnippetStatus.message"
 			>
 				<SnippetModal @update:snippet="(val) => (newSnippet = val)" />
 			</Modal>

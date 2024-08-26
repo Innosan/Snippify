@@ -16,6 +16,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	saveStatusMessage: {
+		type: String,
+		default: "",
+	},
 	onSave: {
 		type: Function,
 		required: true,
@@ -46,13 +50,29 @@ const isOpen = ref(false);
 			</template>
 			<slot />
 			<template #footer>
-				<UButton
-					@click="onSave()"
-					:disabled="isSaveDisabled"
-					label="Save"
-					class="w-full"
-					color="gray"
-				/>
+				<div class="flex gap-2 flex-col">
+					<UButton
+						@click="onSave()"
+						:disabled="isSaveDisabled"
+						label="Save"
+						class="w-full"
+						color="gray"
+					/>
+					<p
+						:class="
+							saveStatusMessage === ''
+								? 'font-bold'
+								: 'text-red-400 '
+						"
+						class="opacity-70 text-sm"
+					>
+						{{
+							saveStatusMessage === ""
+								? "All done!"
+								: saveStatusMessage
+						}}
+					</p>
+				</div>
 			</template>
 		</UCard>
 	</UModal>

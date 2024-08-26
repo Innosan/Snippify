@@ -3,13 +3,15 @@ import { getGenericSnippet, type Snippet } from "~/types/Snippet";
 
 import stacksData from "public/data/stacks.json";
 import languagesData from "public/data/languages.json";
+import tagsData from "public/data/tags.json";
 
 import { type Language } from "~/types/utils/Language";
 import { type Stack } from "~/types/utils/Stack";
-import { type Tag, tags } from "~/types/utils/Tag";
+import { type Tag } from "~/types/utils/Tag";
 
-const stacks: Stack[] = stacksData as Stack[];
-const languages: Language[] = languagesData as Language[];
+const stacks: Stack[] = stacksData;
+const languages: Language[] = languagesData;
+const tags: Tag[] = tagsData.sort((a, b) => a.name.localeCompare(b.name));
 
 const emits = defineEmits(["update:snippet"]);
 
@@ -82,17 +84,18 @@ watch(snippet, (newVal) => {
 			</USelectMenu>
 			<USelectMenu
 				searchable
+				multiple
 				searchable-placeholder="#component, #hook..."
 				placeholder="Pick tags"
 				class="w-36"
-				v-model="snippet.tags[0]"
+				v-model="snippet.tags"
 				:options="tags"
-				option-attribute="title"
+				option-attribute="name"
 				by="id"
-				:search-attributes="['title']"
+				:search-attributes="['name']"
 			>
 				<template #option="{ option: tag }: { option: Tag }">
-					<span class="truncate">{{ tag.title }}</span>
+					<span class="truncate">{{ tag.name }}</span>
 				</template>
 			</USelectMenu>
 		</div>

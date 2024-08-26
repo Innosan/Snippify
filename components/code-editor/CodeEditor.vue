@@ -152,7 +152,7 @@ const contentValue = computed(() => {
 });
 
 const scroll = computed(() => {
-	return props.height == "auto" ? false : true;
+	return props.height != "auto";
 });
 
 // Functions
