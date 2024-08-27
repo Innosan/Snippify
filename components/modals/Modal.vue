@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { PropType } from "vue";
+import type { ModalStatus } from "~/types/ui/ModalStatus";
+
 const props = defineProps({
 	icon: {
 		type: String,
@@ -12,13 +15,13 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	isSaveDisabled: {
+	isSaveLoading: {
 		type: Boolean,
 		default: false,
 	},
-	saveStatusMessage: {
-		type: String,
-		default: "",
+	modalCompletionStatus: {
+		type: Object as PropType<ModalStatus>,
+		required: true,
 	},
 	onSave: {
 		type: Function,
@@ -47,31 +50,40 @@ const isOpen = ref(false);
 						variant="ghost"
 					/>
 				</div>
+				<UProgress
+					class="mt-4"
+					:value="modalCompletionStatus.progress"
+					:max="100"
+					color="blue"
+				>
+					<template #indicator="{ percent }">
+						<div
+							class="text-right"
+							:style="{ width: `${percent}%` }"
+						>
+							<p class="opacity-70 text-nowrap text-sm">
+								{{ modalCompletionStatus.message }}
+							</p>
+						</div>
+					</template>
+				</UProgress>
 			</template>
 			<slot />
 			<template #footer>
 				<div class="flex gap-2 flex-col">
 					<UButton
-						@click="onSave()"
-						:disabled="isSaveDisabled"
+						@click="
+							() => {
+								onSave();
+								isOpen = false;
+							}
+						"
+						:disabled="modalCompletionStatus.isSubmitDisabled"
+						:loading="isSaveLoading"
 						label="Save"
 						class="w-full"
 						color="gray"
 					/>
-					<p
-						:class="
-							saveStatusMessage === ''
-								? 'font-bold'
-								: 'text-red-400 '
-						"
-						class="opacity-70 text-sm"
-					>
-						{{
-							saveStatusMessage === ""
-								? "All done!"
-								: saveStatusMessage
-						}}
-					</p>
 				</div>
 			</template>
 		</UCard>

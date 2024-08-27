@@ -1,16 +1,5 @@
 <script lang="ts" setup>
-import { getGenericSnippet, getSaveStatusMessage } from "~/types/Snippet";
-
 const user = useSupabaseUser();
-
-const newSnippet = ref(getGenericSnippet());
-const saveSnippetStatus = computed(() => {
-	const message = getSaveStatusMessage(newSnippet.value);
-	return {
-		isDisabled: message !== "",
-		message,
-	};
-});
 </script>
 
 <template>
@@ -24,24 +13,7 @@ const saveSnippetStatus = computed(() => {
 			</div>
 		</div>
 		<div v-if="user" class="flex gap-2">
-			<Modal
-				title="Your new snippet"
-				tooltip="Add snippet"
-				icon="i-heroicons-code-bracket-square-solid"
-				:on-save="() => console.log('save snippet')"
-				:is-save-disabled="saveSnippetStatus.isDisabled"
-				:save-status-message="saveSnippetStatus.message"
-			>
-				<SnippetModal @update:snippet="(val) => (newSnippet = val)" />
-			</Modal>
-			<Modal
-				title="Your new guide"
-				tooltip="Create new guide"
-				icon="i-heroicons-bookmark-square-solid"
-				:on-save="() => console.log('save guide')"
-			>
-				<GuideModal />
-			</Modal>
+			<ModalsContainer />
 
 			<SidebarNavigation
 				class="block md:hidden"

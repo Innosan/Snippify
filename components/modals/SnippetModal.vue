@@ -104,14 +104,16 @@ watch(snippet, (newVal) => {
 			placeholder="// Write your code here..."
 			:language="snippet.language"
 			height="20rem"
-			font-size="14px"
 			:tab-spaces="4"
-			class="h-64"
 			:line-nums="true"
 			v-model="snippet.code"
 			:copy-code="false"
 		/>
-		<UInput v-model="snippet.title" placeholder="Title" />
-		<UTextarea v-model="snippet.description" placeholder="Description" />
+		<UInput
+			icon="i-heroicons-bars-2-solid"
+			v-model="snippet.title"
+			placeholder="Name your snippet"
+		/>
+		<UTextarea v-model="snippet.description" placeholder="Describe it" />
 	</div>
 </template>

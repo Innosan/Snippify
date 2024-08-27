@@ -2,7 +2,7 @@
 import { useSnippetsStore } from "~/stores/snippets";
 
 const snippetsStore = useSnippetsStore();
-await snippetsStore.getUserSnippets();
+snippetsStore.getUserSnippets();
 
 const tabs = [
 	{ name: "Snippets", to: "snippets" },
